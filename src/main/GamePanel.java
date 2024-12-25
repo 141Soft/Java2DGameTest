@@ -4,12 +4,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
 import entity.Player;
 
 public class GamePanel extends JPanel implements Runnable{
+	
+	//Getting machine screen size
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	double width = screenSize.getWidth();
+	double height = screenSize.getHeight();
 	
 	//Screen Settings
 	final int originalTileSize = 24; //24x24
@@ -18,8 +24,8 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int charSpriteWidth = 16 * scale;
 	
 	//4x3 ratio
-	final int maxScreenCol = 12;
-	final int maxScreenRow = 9; //set to 9 for laptop, could be 12
+	final int maxScreenCol = (int) Math.round(width / tileSize) - 1;
+	final int maxScreenRow = (int) Math.round(height / tileSize) - 1;
 	final int screenWidth = tileSize * maxScreenCol;
 	final int screenHeight = tileSize * maxScreenRow;
 	
