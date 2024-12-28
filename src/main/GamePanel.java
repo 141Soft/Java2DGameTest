@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import javax.swing.JPanel;
 
 import entity.Player;
+import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
 	
@@ -22,32 +23,44 @@ public class GamePanel extends JPanel implements Runnable{
 	final int scale = 3;
 	public final int tileSize = originalTileSize * scale; //72x72
 	public final int charSpriteWidth = 16 * scale;
+	public final int maxScreenCol = 16;
+	public final int maxScreenRow = 12;
 	
 	//4x3 ratio
-	final int maxScreenCol = (int) Math.round(width / tileSize) - 1;
-	final int maxScreenRow = (int) Math.round(height / tileSize) - 1;
-	final int screenWidth = tileSize * maxScreenCol;
-	final int screenHeight = tileSize * maxScreenRow;
 	
 	//FPS
 	int maxFPS = 60;
 	
+	TileManager tileM = new TileManager(this);
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
 	Player player = new Player(this, keyH);
 	
-	// Player default
-	int playerX = 100;
-	int playerY = 100;
-	int playerSpeed = 4;
-	
 	//constructor
 	public GamePanel() {
-		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+		final int[] dimensions = getScreenSize(maxScreenCol, maxScreenRow);
+		this.setPreferredSize(new Dimension(dimensions[0], dimensions[1]));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH);
 		this.setFocusable(true);
+	}
+	
+	public int[] getScreenSize(int maxCol, int maxRow) {
+		//Ensures that window never exceeds a certain number of tiles, 
+		//while allowing shrinkage
+		
+		final int maxScreenCol = (int) Math.round(width / tileSize) - 1;
+		final int maxScreenRow = (int) Math.round(height / tileSize) - 1;
+		int[] sizes = new int[2];
+		
+		if(maxScreenCol > maxCol) {sizes[0] = maxCol * tileSize;}
+		else {sizes[0] = maxScreenCol * tileSize;}
+		
+		if(maxScreenRow > maxRow) {sizes[1] = maxRow * tileSize;}
+		else {sizes[1] = maxScreenRow * tileSize;}
+		
+		return sizes;
 	}
 	
 	public void startGameThread() {
@@ -99,6 +112,9 @@ public class GamePanel extends JPanel implements Runnable{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
+		
+		tileM.draw(g2);
+		
 		player.draw(g2);
 		
 		g2.dispose();
