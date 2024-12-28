@@ -22,7 +22,7 @@ public class TileManager {
 		mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
 		
 		getTileImage();
-		loadMap();
+		loadMap("/maps/map1.txt");
 	}
 	
 	public void getTileImage() {
@@ -40,23 +40,22 @@ public class TileManager {
 		}
 	}
 	
-	public void loadMap() {
+	public void loadMap(String path) {
 		try {
-			InputStream is = getClass().getResourceAsStream("/maps/map1.txt");
+			InputStream is = getClass().getResourceAsStream(path);
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			String line = br.readLine();
 			
 			for(int i=0; i < gp.maxScreenRow; i++) {
 				String numbers[] = line.split(" ");
 				for(int j=0; j < gp.maxScreenCol; j++) {
-					System.out.println(line);
 					int num = Integer.parseInt(numbers[j]);
 					mapTileNum[j][i] = num;
 				}
-				//For some reason this is how readline works
-				//Call it again to advance to the next line
+				//advances to next line
 				line = br.readLine();
-			}			
+			}
+			br.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
