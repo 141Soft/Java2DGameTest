@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -22,6 +23,13 @@ public class Player extends Entity {
 		
 		screenX = gp.dimensions[0]/2 - (gp.tileSize/2);
 		screenY = gp.dimensions[1]/2 - (gp.tileSize/2);
+		
+		//Based on 72 given that the player width is actually smaller than a tile
+		collisionArea = new Rectangle();
+		collisionArea.x = 3;
+		collisionArea.y = 24;
+		collisionArea.width = 42;
+		collisionArea.height = 44;
 		
 		setDefaultValues();
 		getPlayerImage();
@@ -54,6 +62,8 @@ public class Player extends Entity {
 	}
 	
 	public void move() {
+		collisionOn = false;
+		gp.collChecker.checkTile(this);
 		
 		if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 			spriteCounter++;
@@ -61,25 +71,37 @@ public class Player extends Entity {
 				spriteSwitch = !spriteSwitch;
 				spriteCounter = 0;
 			}
+			
+			if(collisionOn == false) {
+				switch(direction) {
+				case "up":
+					worldY -= speed;
+					break;
+				case "down":
+					worldY += speed;
+					break;
+				case "left":
+					worldX -= speed;
+					break;
+				case "right":
+					worldX += speed;
+					break;
+				}
+			}
+			
+			if(keyH.upPressed == true) {
+				direction="up";
+			}
+			else if(keyH.downPressed == true) {
+				direction="down";
+			}
+			else if(keyH.leftPressed == true) {
+				direction="left";
+			}
+			else if(keyH.rightPressed == true) {
+				direction="right";
+			}
 		}
-		
-		if(keyH.upPressed == true) {
-			direction="up";
-			worldY -= speed;
-		}
-		if(keyH.downPressed == true) {
-			direction="down";
-			worldY += speed;
-		}
-		if(keyH.leftPressed == true) {
-			direction="left";
-			worldX -= speed;
-		}
-		if(keyH.rightPressed == true) {
-			direction="right";
-			worldX += speed;
-		}
-		
 	}
 	
 	public void update() {
