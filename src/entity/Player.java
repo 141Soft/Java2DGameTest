@@ -1,6 +1,5 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,17 +13,23 @@ public class Player extends Entity {
 	GamePanel gp;
 	KeyHandler keyH;
 	
+	public final int screenX;
+	public final int screenY;
+	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp =gp;
 		this.keyH = keyH;
+		
+		screenX = gp.dimensions[0]/2 - (gp.tileSize/2);
+		screenY = gp.dimensions[1]/2 - (gp.tileSize/2);
 		
 		setDefaultValues();
 		getPlayerImage();
 	}
 	
 	public void setDefaultValues() {
-		x = 100;
-		y = 100;
+		worldX = gp.tileSize * 19;
+		worldY = gp.tileSize * 19;
 		speed = 4;
 		direction = "down";
 	}
@@ -60,19 +65,19 @@ public class Player extends Entity {
 		
 		if(keyH.upPressed == true) {
 			direction="up";
-			y -= speed;
+			worldY -= speed;
 		}
 		if(keyH.downPressed == true) {
 			direction="down";
-			y += speed;
+			worldY += speed;
 		}
 		if(keyH.leftPressed == true) {
 			direction="left";
-			x -= speed;
+			worldX -= speed;
 		}
 		if(keyH.rightPressed == true) {
 			direction="right";
-			x += speed;
+			worldX += speed;
 		}
 		
 	}
@@ -106,6 +111,6 @@ public class Player extends Entity {
 			else { image = right2; }
 			break;
 		}
-		g2.drawImage(image, x, y, gp.charSpriteWidth, gp.tileSize, null);
+		g2.drawImage(image, screenX, screenY, gp.charSpriteWidth, gp.tileSize, null);
 	}
 }

@@ -19,7 +19,7 @@ public class TileManager {
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		tile = new Tile[10];
-		mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
+		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 		
 		getTileImage();
 		loadMap("/maps/map1.txt");
@@ -31,9 +31,17 @@ public class TileManager {
 				tile[0] = new Tile();
 				tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
 				tile[1] = new Tile();
-				tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
+				tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass_faded.png"));
 				tile[2] = new Tile();
-				tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
+				tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
+				tile[3] = new Tile();
+				tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall_topper.png"));
+				tile[4] = new Tile();
+				tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/paving.png"));
+				tile[5] = new Tile();
+				tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
+				tile[6] = new Tile();
+				tile[6].image = ImageIO.read(getClass().getResourceAsStream("/tiles/rock.png"));
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -46,9 +54,9 @@ public class TileManager {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			String line = br.readLine();
 			
-			for(int i=0; i < gp.maxScreenRow; i++) {
+			for(int i=0; i < gp.maxWorldRow; i++) {
 				String numbers[] = line.split(" ");
-				for(int j=0; j < gp.maxScreenCol; j++) {
+				for(int j=0; j < gp.maxWorldCol; j++) {
 					int num = Integer.parseInt(numbers[j]);
 					mapTileNum[j][i] = num;
 				}
@@ -62,11 +70,25 @@ public class TileManager {
 	}
 	
 	public void draw(Graphics2D g2) {
-		for(int i = 0; i < gp.maxScreenRow; i++) {
-			for(int j = 0; j < gp.maxScreenCol; j++) {
+		
+		int xOffset = gp.player.worldX + gp.player.screenX;
+		int yOffset = gp.player.worldY + gp.player.screenY;
+		
+		int xInset = gp.player.worldX - gp.player.screenX;
+		int yInset = gp.player.worldY - gp.player.screenY;
+		
+		
+		for(int i = 0; i < gp.maxWorldRow; i++) {
+			for(int j = 0; j < gp.maxWorldCol; j++) {
 				int tileNum = mapTileNum[j][i];
-				//in here we can do a conditional that reads a map of tiles to select the correct tile array position
-				g2.drawImage(tile[tileNum].image, 72*j, 72*i, gp.tileSize, gp.tileSize, null);
+				if(gp.tileSize*j + gp.tileSize > xInset &&
+				   gp.tileSize*j - gp.tileSize < xOffset &&
+				   gp.tileSize*i + gp.tileSize > yInset &&
+				   gp.tileSize*i - gp.tileSize < yOffset) {
+					//This conditional only draws tiles if they're within a screen boundary of the player
+					//Draw method is actually a little backwards because I draw column by column
+					g2.drawImage(tile[tileNum].image,gp.tileSize*j - xInset,gp.tileSize*i - yInset, gp.tileSize, gp.tileSize, null);
+				}
 			}
 		}
 	}
