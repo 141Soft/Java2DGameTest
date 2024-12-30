@@ -17,6 +17,8 @@ public class Player extends Entity {
 	public final int screenX;
 	public final int screenY;
 	
+	int hasKey = 0;
+	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp =gp;
 		this.keyH = keyH;
@@ -28,6 +30,8 @@ public class Player extends Entity {
 		collisionArea = new Rectangle();
 		collisionArea.x = 3;
 		collisionArea.y = 24;
+		collisionAreaDefaultX = collisionArea.x;
+		collisionAreaDefaultY = collisionArea.y;
 		collisionArea.width = 42;
 		collisionArea.height = 44;
 		
@@ -61,8 +65,25 @@ public class Player extends Entity {
 		}
 	}
 	
+	public void objectEvents(int i) {
+		if(i != 999) {
+			String objectName = gp.obj[i].name;
+			switch(objectName) {
+			case "Key":
+				gp.obj[i] = null;
+				hasKey ++;
+				break;
+			case "Door":
+				if(hasKey > 0) {
+					hasKey --;
+					gp.obj[i] = null;
+				}
+				break;
+			}
+		}
+	}
+	
 	public void move() {
-		collisionOn = false;
 		gp.collChecker.checkTile(this);
 		
 		//Animations
@@ -109,6 +130,10 @@ public class Player extends Entity {
 	}
 	
 	public void update() {
+		//resets collision state every frame
+		collisionOn = false;
+		int objIndex = gp.collChecker.checkObject(this, true);
+		objectEvents(objIndex);
 		move();
 	}
 	

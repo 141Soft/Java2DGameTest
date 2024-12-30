@@ -15,5 +15,6 @@ public class Entity {
 	public boolean spriteSwitch = true;
 	
 	public Rectangle collisionArea;
+	public int collisionAreaDefaultX, collisionAreaDefaultY;
 	public boolean collisionOn = false;
 }
