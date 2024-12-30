@@ -72,8 +72,22 @@ public class Player extends Entity {
 				spriteSwitch = !spriteSwitch;
 				spriteCounter = 0;
 			}
+			
+		//Movement direction setting
+		if(keyH.upPressed == true) {
+			direction="up";
+			}
+		else if(keyH.downPressed == true) {
+				direction="down";
+			}
+		else if(keyH.leftPressed == true) {
+			direction="left";
+			}
+		else if(keyH.rightPressed == true) {
+				direction="right";
+			}
 		
-		//Collisions
+		//Collisions / Speed
 		if(collisionOn == false) {
 			switch(direction) {
 			case "up":
@@ -90,19 +104,7 @@ public class Player extends Entity {
 				break;
 				}
 			}
-		//Movement direction setting
-		if(keyH.upPressed == true) {
-			direction="up";
-			}
-		else if(keyH.downPressed == true) {
-				direction="down";
-			}
-		else if(keyH.leftPressed == true) {
-			direction="left";
-			}
-		else if(keyH.rightPressed == true) {
-				direction="right";
-			}
+		
 		}
 	}
 	

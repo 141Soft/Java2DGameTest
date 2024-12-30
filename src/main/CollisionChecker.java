@@ -12,7 +12,6 @@ public class CollisionChecker {
 	
 	public void checkTile(Entity entity) {
 		
-		
 		int entityLeftWorldX = entity.worldX + entity.collisionArea.x;
 		int entityRightWorldX = entity.worldX + entity.collisionArea.x + entity.collisionArea.width;
 		int entityTopWorldY = entity.worldY + entity.collisionArea.y;
@@ -24,6 +23,8 @@ public class CollisionChecker {
 		int entityBottomRow = entityBottomWorldY/gp.tileSize;
 		
 		int tileNum1, tileNum2;
+		
+		
 		
 		switch(entity.direction) {
 		case "up":

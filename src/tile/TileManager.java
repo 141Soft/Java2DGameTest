@@ -45,6 +45,7 @@ public class TileManager {
 				tile[5].collision = true;
 				tile[6] = new Tile();
 				tile[6].image = ImageIO.read(getClass().getResourceAsStream("/tiles/rock.png"));
+				tile[6].collision = true;
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -90,7 +91,7 @@ public class TileManager {
 				   gp.tileSize*i - gp.tileSize < yOffset) {
 					//This conditional only draws tiles if they're within a screen boundary of the player
 					//Draw method is actually a little backwards because I draw column by column
-					g2.drawImage(tile[tileNum].image,gp.tileSize*j - xInset,gp.tileSize*i - yInset, gp.tileSize, gp.tileSize, null);
+					g2.drawImage(tile[tileNum].image,gp.tileSize*j - xInset, gp.tileSize*i - yInset, gp.tileSize, gp.tileSize, null);
 				}
 			}
 		}
