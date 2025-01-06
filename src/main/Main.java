@@ -7,8 +7,8 @@ public class Main {
 	public static void main(String[] args) {
 		
 		
-		//for linux
-		System.setProperty("sun.java2d.opengl", "true");
+		//for linux - doesn't work on my arch
+		//System.setProperty("sun.java2d.opengl", "true");
 		
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
